@@ -20,34 +20,51 @@ Använd props för att skicka information om det belopp som barnet behöver till
 */
 function App() {
 
-  const ParentComponent = () => {
+const ParentComponent = () => {
 
-    return (
-      <div>
-        <h2>Parent</h2>
-        <p>Saldo: __</p>
+  const [accountAssets, setAmount] = useState(20000);
 
-      </div>
-    )
-  }
+  const withdraw = (amount) => {
 
-  const ChildComponent = () => {
-
-    return (
-      <div>
-        <h2>Child</h2>
-        <p>Saldo: __</p>
-        <input id='amountField' type="Integer" placeholder='Amount' />
-        <button id='demandButton'>Demand</button>
-      </div>
-    )
+    setAmount(accountAssets - amount);
   }
 
   return (
+    <div>
+      <h2>Parent</h2>
+      Account total: {accountAssets}€
+      <h1>-------------------</h1>
+
+      <ChildComponent requestMethod={withdraw} />
+    </div>
+  )
+
+}
+
+const ChildComponent = ({requestMethod}) => {
+
+  const[amount, setDemand] = useState(0);
+  
+  const handleDemand = (e) => {
+    requestMethod(amount);
+  }
+
+  const handleDemandChange = (e) => {
+    setDemand(parseInt(e.target.value));
+  }
+
+  return (
+    <div>
+      <h2>Child</h2>
+      <input type="text" value={amount} onChange={handleDemandChange} />
+      <button onClick={handleDemand}>Demand</button>
+    </div>
+  )
+}
+
+  return (
     <>
-      <ParentComponent />
-      
-      <ChildComponent />
+    <ParentComponent />
     </>
   )
 }
